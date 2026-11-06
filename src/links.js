@@ -44,7 +44,7 @@ export const deleteLink = async (code) => {
 
   await saveLinks(links.filter((l) => l.code !== code));
 
-  return newLinks;
+  return link;
 };
 
 export async function createLink(url) {

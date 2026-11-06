@@ -1,9 +1,13 @@
 <%- include('partials/header') %>
 
+
 <form method="post" action="/links" class="create">
   <input name="url" placeholder="https://..." required>
   <button>Raccourcir</button>
 </form>
+
+<% if (error) { %><p class="error"><%= error %></p><% } %>
+
 
 <table>
   <tr><th>Lien court</th><th>Adresse</th><th>Clics</th><th></th></tr>
@@ -12,6 +16,11 @@
       <td><a href="/<%= link.code %>">/<%= link.code %></a></td>
       <td class="url"><%= link.url %></td>
       <td><%= link.clicks %></td>
+      <td>
+        <form method="post" action="/links/<%= link.code %>/delete">
+          <button class="danger">Supprimer</button>
+        </form>
+      </td>
     </tr>
   <% }) %>
 </table>
