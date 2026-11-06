@@ -1,7 +1,7 @@
 import { customAlphabet } from "nanoid";
 import { readFile, writeFile } from "node:fs/promises";
 
-const FILE = new URL("./data/links.json", import.meta.url);
+const FILE = new URL("../data/links.json", import.meta.url);
 
 const generateCode = customAlphabet("abcdefghijklmnopqrstuvwxyz1234567890", 8);
 
@@ -22,6 +22,24 @@ export async function loadLinks() {
 
 export const saveLinks = async (links) => {
   await writeFile(FILE, JSON.stringify(links, null, 2));
+};
+
+export const getLink = async (code) => {
+  const links = await loadLinks();
+
+  const link = links.find((l) => l.code === code);
+
+  return link;
+};
+
+export const deleteLink = async (code) => {
+  const links = await loadLinks();
+
+  const newLinks = links.filter((l) => l.code !== code);
+
+  await saveLinks(newLinks);
+
+  return newLinks;
 };
 
 export async function createLink(url) {
