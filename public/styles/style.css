@@ -1,0 +1,63 @@
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #0f6b6b;
+  text-decoration: none;
+}
+.create {
+  display: flex;
+  gap: 8px;
+}
+.create input {
+  flex: 1;
+}
+input {
+  padding: 10px;
+  font-size: 1rem;
+}
+button {
+  background: #0f6b6b;
+  color: white;
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+button.danger {
+  background: #b42318;
+  padding: 6px 10px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+}
+th,
+td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+.url {
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.error {
+  color: #b42318;
+}

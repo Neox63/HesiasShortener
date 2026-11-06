@@ -1,0 +1,20 @@
+<%- include('partials/header') %>
+
+<form method="post" action="/links" class="create">
+  <input name="url" placeholder="https://..." required>
+  <button>Raccourcir</button>
+</form>
+
+<table>
+  <tr><th>Lien court</th><th>Adresse</th><th>Clics</th><th></th></tr>
+  <% links.forEach((link) => { %>
+    <tr>
+      <td><a href="/<%= link.code %>">/<%= link.code %></a></td>
+      <td class="url"><%= link.url %></td>
+      <td><%= link.clicks %></td>
+    </tr>
+  <% }) %>
+</table>
+<p><%= links.length %> liens</p>
+
+<%- include('partials/footer') %>

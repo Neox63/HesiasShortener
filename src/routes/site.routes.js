@@ -7,7 +7,7 @@ import { createLinkSchema } from "../schemas/link.schema.js";
 export const router = Router();
 
 router.get("/", async (req, res) => {
-  res.send(renderPage(await loadLinks()));
+  res.render("index", { links: await loadLinks() });
 });
 
 router.post("/links", validate(createLinkSchema), async (req, res) => {
