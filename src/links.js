@@ -1,5 +1,6 @@
 import { customAlphabet } from "nanoid";
 import { readFile, writeFile } from "node:fs/promises";
+import { HttpError } from "./HttpError.js";
 
 const FILE = new URL("../data/links.json", import.meta.url);
 
@@ -29,15 +30,19 @@ export const getLink = async (code) => {
 
   const link = links.find((l) => l.code === code);
 
+  if (!link) throw new HttpError(404, "Lien introuvable");
+
   return link;
 };
 
 export const deleteLink = async (code) => {
   const links = await loadLinks();
 
-  const newLinks = links.filter((l) => l.code !== code);
+  const link = links.find((l) => l.code === code);
 
-  await saveLinks(newLinks);
+  if (!link) throw new HttpError(404, "Lien introuvable");
+
+  await saveLinks(links.filter((l) => l.code !== code));
 
   return newLinks;
 };
@@ -63,11 +68,11 @@ export async function useLink(code) {
 
   const link = links.find((l) => l.code === code);
 
-  if (link) {
-    link.clicks++;
+  if (!link) throw new HttpError(404, "Lien introuvable");
 
-    await saveLinks(links);
-  }
+  link.clicks++;
+
+  await saveLinks(links);
 
   return link;
 }
