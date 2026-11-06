@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { createLink, deleteLink, getLink, isValidUrl, loadLinks } from "../links.js";
+import { validate } from "../middlewares/validate.js";
+import { createLinkSchema } from "../schemas/link.schema.js";
 
 export const router = Router();
 
@@ -11,7 +13,7 @@ router.get("/:code", async (req, res) => {
   res.json(await getLink(req.params.code));
 });
 
-router.post("/", async (req, res) => {
+router.post("/", validate(createLinkSchema), async (req, res) => {
   const { url } = req.body;
 
   if (!url) {
