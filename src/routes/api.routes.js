@@ -24,7 +24,7 @@ router.post("/", validate(createLinkSchema), async (req, res) => {
     res.status(400).json("Error: invalid URL");
   }
 
-  const link = await createLink(link);
+  const link = await createLink(url);
 
   res.status(201).json(link);
 });
