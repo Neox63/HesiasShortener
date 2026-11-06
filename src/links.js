@@ -1,7 +1,19 @@
+import { customAlphabet } from "nanoid";
 import { readFile, writeFile } from "node:fs/promises";
 
 const FILE = new URL("./data/links.json", import.meta.url);
 
+const generateCode = customAlphabet("abcdefghijklmnopqrstuvwxyz1234567890", 8);
+
+export function isValidUrl(url) {
+  try {
+    const parsedUrl = new URL(url);
+
+    return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
 export async function loadLinks() {
   const content = await readFile(FILE, "utf-8");
 
@@ -15,10 +27,8 @@ export const saveLinks = async (links) => {
 export async function createLink(url) {
   const links = await loadLinks();
 
-  const code = Math.floor(Math.random() * 1000) + 1;
-
   const link = {
-    code,
+    code: generateCode(),
     url,
     clicks: 0,
   };
