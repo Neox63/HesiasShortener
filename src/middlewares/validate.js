@@ -7,7 +7,7 @@ export const validate = (schema) => (req, res, next) => {
       message: i.message,
     }));
 
-    res.status(400).json({
+    return res.status(400).json({
       error: "Données invalides",
       details,
     });
