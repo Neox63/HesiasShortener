@@ -1,23 +1,33 @@
 import { Router } from "express";
-import { renderPage } from "../page.js";
 import { createLink, deleteLink, getLink, loadLinks, useLink } from "../links.js";
-import { validate } from "../middlewares/validate.js";
 import { createLinkSchema } from "../schemas/link.schema.js";
-import { error } from "node:console";
 
 export const router = Router();
 
 router.get("/", async (req, res) => {
-  res.render("index", { links: await loadLinks(), error: null });
+  const links = await loadLinks();
+
+  const { sort } = req.query;
+  const order = req.query.order === "asc" ? "asc" : "desc";
+
+  if (sort === "clicks") {
+    const direction = order === "asc" ? 1 : -1;
+    links.sort((a, b) => direction * (a.clicks - b.clicks));
+  }
+
+  res.render("index", { links, error: null, sort, order });
 });
 
 router.post("/links", async (req, res) => {
   const result = createLinkSchema.safeParse(req.body);
 
   if (!result.success) {
-    return res
-      .status(400)
-      .render("index", { links: await loadLinks(), error: "URL invalide" });
+    return res.status(400).render("index", {
+      links: await loadLinks(),
+      error: "URL invalide",
+      sort: null,
+      order: null,
+    });
   }
 
   await createLink(req.body.url);
