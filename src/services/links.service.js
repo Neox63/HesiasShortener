@@ -1,38 +1,32 @@
 import { customAlphabet } from "nanoid";
-import { readFile, writeFile } from "node:fs/promises";
-import { HttpError } from "./HttpError.js";
+import { writeFile } from "node:fs/promises";
+import { HttpError } from "../HttpError.js";
+import { prisma } from "../db.js";
 
 const FILE = new URL("../data/links.json", import.meta.url);
 
 const generateCode = customAlphabet("abcdefghijklmnopqrstuvwxyz1234567890", 8);
 
-export function isValidUrl(url) {
-  try {
-    const parsedUrl = new URL(url);
-
-    return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
 export async function loadLinks() {
-  const content = await readFile(FILE, "utf-8");
+  const links = await prisma.link.findMany({
+    include: {
+      _count: {
+        select: {
+          clicks: true,
+        },
+      },
+    },
+  });
 
-  return JSON.parse(content);
+  return links.map(({ _count, ...link }) => ({ ...link, clicks: _count.clicks }));
 }
+
+export const getLink = async (code) => {
+  return prisma.link.findUniqueOrThrow({ where: { code } });
+};
 
 export const saveLinks = async (links) => {
   await writeFile(FILE, JSON.stringify(links, null, 2));
-};
-
-export const getLink = async (code) => {
-  const links = await loadLinks();
-
-  const link = links.find((l) => l.code === code);
-
-  if (!link) throw new HttpError(404, "Lien introuvable");
-
-  return link;
 };
 
 export const deleteLink = async (code) => {

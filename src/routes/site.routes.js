@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { createLink, deleteLink, getLink, loadLinks, useLink } from "../links.js";
+import {
+  createLink,
+  deleteLink,
+  getLink,
+  loadLinks,
+  useLink,
+} from "../services/links.service.js";
 import { createLinkSchema } from "../schemas/link.schema.js";
 
 export const router = Router();
