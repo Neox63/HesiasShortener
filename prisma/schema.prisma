@@ -8,10 +8,11 @@ datasource db {
 }
 
 model Link {
-  id        Int      @id @default(autoincrement())
-  code      String   @unique
+  id        Int       @id @default(autoincrement())
+  code      String    @unique
   url       String
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
+  expiresAt DateTime?
   clicks    Click[]
 }
 

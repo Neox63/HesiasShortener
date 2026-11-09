@@ -1,5 +1,6 @@
 import { customAlphabet } from "nanoid";
 import { prisma } from "../db.js";
+import { HttpError } from "../HttpError.js";
 
 const generateCode = customAlphabet("abcdefghijklmnopqrstuvwxyz1234567890", 8);
 
@@ -37,15 +38,25 @@ export const deleteLink = async (code) => {
 };
 
 export async function createLink(url) {
+  const expiresAt = new Date();
+  expiresAt.setMonth(expiresAt.getMonth() + 1);
+
   return prisma.link.create({
     data: {
       code: generateCode(),
       url,
+      expiresAt,
     },
   });
 }
 
 export async function useLink(code, referer) {
+  const link = await getLink(code);
+
+  if (link.expiresAt && link.expiresAt < new Date()) {
+    throw new HttpError(410, "Lien expiré");
+  }
+
   return prisma.link.update({
     where: { code },
     data: {

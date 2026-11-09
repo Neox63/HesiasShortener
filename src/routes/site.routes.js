@@ -46,5 +46,7 @@ router.post("/links/:code/delete", async (req, res) => {
 });
 
 router.get("/:code", async (req, res) => {
-  res.redirect((await useLink(req.params.code, req.get("referer"))).url);
+  const link = await useLink(req.params.code, req.get("referer"));
+
+  res.redirect(link.url);
 });

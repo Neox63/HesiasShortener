@@ -28,4 +28,8 @@ await prisma.link.create({
   },
 });
 
+await prisma.link.create({
+  data: { code: "expire", url: "https://example.com", expiresAt: new Date("2026-10-01") },
+});
+
 console.log("Base remplie");
