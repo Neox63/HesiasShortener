@@ -8,22 +8,29 @@
 
 <% if (error) { %><p class="error"><%= error %></p><% } %>
 
-<form method="get" action="/">
-  <p>Trier par :</p>
-  <input type="hidden" name="sort" value="clicks">
-  <button name="order" value="desc" <%= sort === "clicks" && order === "desc" ? "disabled" : "" %>>Plus cliqués</button>
-  <button name="order" value="asc"  <%= sort === "clicks" && order === "asc"  ? "disabled" : "" %>>Moins cliqués</button>
-  <a href="/">Ordre d'origine</a>
+<p>Trier par :</p>
+<form method="get" action="/" class="sort">
+  <button name="sort" value="clicks">Plus cliqués</button>
+  <a href="/">Plus récents</a>
 </form>
 
 
 <table>
-  <tr><th>Lien court</th><th>Adresse</th><th>Clics</th><th></th></tr>
+  <tr><th>Lien court</th><th>Adresse</th><th>Clics</th><th>Expire le</th><th></th></tr>
   <% links.forEach((link) => { %>
     <tr>
       <td><a href="/<%= link.code %>">/<%= link.code %></a></td>
       <td class="url"><%= link.url %></td>
       <td><%= link.clicks %></td>
+      <td>
+        <% if (!link.expiresAt) { %>
+          Jamais
+        <% } else if (link.expiresAt < new Date()) { %>
+          Expiré
+        <% } else { %>
+          <%= link.expiresAt.toLocaleDateString('fr-FR') %>
+        <% } %>
+      </td>
       <td>
         <form method="post" action="/links/<%= link.code %>/delete">
           <button class="danger">Supprimer</button>

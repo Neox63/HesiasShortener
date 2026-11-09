@@ -11,17 +11,11 @@ import { createLinkSchema } from "../schemas/link.schema.js";
 export const router = Router();
 
 router.get("/", async (req, res) => {
-  let links;
-  const { sort } = req.query;
-  const order = req.query.order === "asc" ? "asc" : "desc";
+  const links = await loadLinks({
+    sort: req.query.sort,
+  });
 
-  if (sort === "clicks") {
-    links = await loadLinks(order);
-  } else {
-    links = await loadLinks();
-  }
-
-  res.render("index", { links, error: null, sort, order });
+  res.render("index", { links, error: null });
 });
 
 router.post("/links", async (req, res) => {

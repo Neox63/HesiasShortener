@@ -4,26 +4,10 @@ import { HttpError } from "../HttpError.js";
 
 const generateCode = customAlphabet("abcdefghijklmnopqrstuvwxyz1234567890", 8);
 
-export async function loadLinks(order) {
-  let orderBy;
-
-  if (order) {
-    orderBy = {
-      clicks: {
-        _count: order,
-      },
-    };
-  }
-
+export async function loadLinks({ sort } = {}) {
   const links = await prisma.link.findMany({
-    include: {
-      _count: {
-        select: {
-          clicks: true,
-        },
-      },
-    },
-    orderBy,
+    include: { _count: { select: { clicks: true } } },
+    orderBy: sort === "clicks" ? { clicks: { _count: "desc" } } : { createdAt: "desc" },
   });
 
   return links.map(({ _count, ...link }) => ({ ...link, clicks: _count.clicks }));
