@@ -11,14 +11,14 @@ import { createLinkSchema } from "../schemas/link.schema.js";
 export const router = Router();
 
 router.get("/", async (req, res) => {
-  const links = await loadLinks();
-
+  let links;
   const { sort } = req.query;
   const order = req.query.order === "asc" ? "asc" : "desc";
 
   if (sort === "clicks") {
-    const direction = order === "asc" ? 1 : -1;
-    links.sort((a, b) => direction * (a.clicks - b.clicks));
+    links = await loadLinks(order);
+  } else {
+    links = await loadLinks();
   }
 
   res.render("index", { links, error: null, sort, order });
@@ -46,5 +46,5 @@ router.post("/links/:code/delete", async (req, res) => {
 });
 
 router.get("/:code", async (req, res) => {
-  res.redirect((await useLink(req.params.code)).url);
+  res.redirect((await useLink(req.params.code, req.get("referer"))).url);
 });

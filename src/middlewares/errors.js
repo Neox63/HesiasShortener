@@ -7,6 +7,8 @@ export function errorHandler(err, req, res, next) {
     return res.status(400).json({ error: "JSON invalide" });
 
   if (err.code === "P2025") return res.status(404).json({ error: "Lien introuvable" });
+  if (err.code === "P2002")
+    return res.status(409).json({ error: "Ce code est déjà pris" });
 
   const status = err.status ?? 500;
 
