@@ -1,9 +1,11 @@
 import { Router } from "express";
 import { authSchema } from "../schemas/auth.schema.js";
 import { register, signToken, login } from "../services/auth.service.js";
-import { HttpError } from "../HttpError.js";
+import rateLimit from "express-rate-limit";
 
 export const router = Router();
+
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 15 });
 
 const cookieOptions = { httpOnly: true, sameSite: "lax", maxAge: 2 * 60 * 60 * 1000 };
 
@@ -11,7 +13,7 @@ router.get("/login", (req, res) => res.render("login", { error: null }));
 
 router.get("/register", (req, res) => res.render("register", { error: null }));
 
-router.post("/login", async (req, res) => {
+router.post("/login", limiter, async (req, res) => {
   const result = authSchema.safeParse(req.body);
 
   if (!result.success)
@@ -28,7 +30,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/register", async (req, res) => {
+router.post("/register", limiter, async (req, res) => {
   const result = authSchema.safeParse(req.body);
 
   if (!result.success)

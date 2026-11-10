@@ -8,5 +8,8 @@ export const router = Router();
 router.use(requireAuth, requireRole("ADMIN"));
 
 router.get("/", async (req, res, next) => {
-  return res.render("admin", { users: await loadUsers(), links: await loadLinks() });
+  return res.render("admin", {
+    users: await loadUsers(),
+    links: await loadLinks({ user: req.user }),
+  });
 });

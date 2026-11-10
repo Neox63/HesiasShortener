@@ -5,7 +5,6 @@ export async function loadUsers() {
     select: {
       email: true,
       role: true,
-      createdAt: true,
       _count: {
         select: {
           links: true,
