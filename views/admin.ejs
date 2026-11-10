@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+
+<h1>Les comptes</h1>
+<table>
+  <tr><th>Email</th><th>Rôle</th><th>Liens</th><th>Créé le</th></tr>
+  <% users.forEach((u) => { %>
+    <tr>
+      <td><%= u.email %></td>
+      <td><%= u.role %></td>
+      <td><%= u.links %></td>
+      <td><%= u.createdAt.toLocaleDateString('fr-FR') %></td>
+    </tr>
+  <% }) %>
+</table>
+<p><%= users.length %> comptes</p>
+
+<%- include('partials/footer') %>

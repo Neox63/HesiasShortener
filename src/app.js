@@ -2,6 +2,7 @@ import express from "express";
 import { router as apiRouter } from "./routes/api.routes.js";
 import { router as authRouter } from "./routes/auth.routes.js";
 import { router as siteRouter } from "./routes/site.routes.js";
+import { router as adminRouter } from "./routes/admin.routes.js";
 import { errorHandler, notFound } from "./middlewares/errors.js";
 import morgan from "morgan";
 import path from "node:path";
@@ -24,6 +25,7 @@ app.use(loadUser);
 
 app.use("/api/links", apiRouter);
 app.use("/", authRouter);
+app.use("/admin", adminRouter);
 app.use("/", siteRouter);
 
 app.use(notFound);

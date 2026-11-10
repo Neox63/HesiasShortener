@@ -6,9 +6,12 @@ const generateCode = customAlphabet("abcdefghijklmnopqrstuvwxyz1234567890", 8);
 
 export async function loadLinks({ user, sort } = {}) {
   const links = await prisma.link.findMany({
-    where: {
-      userId: user.id,
-    },
+    where:
+      user.role === "ADMIN"
+        ? {}
+        : {
+            userId: user.id,
+          },
     include: { _count: { select: { clicks: true } } },
     orderBy: sort === "clicks" ? { clicks: { _count: "desc" } } : { createdAt: "desc" },
   });

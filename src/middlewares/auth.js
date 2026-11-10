@@ -28,9 +28,16 @@ export function requireAuth(req, res, next) {
 export async function canEdit(req, res, next) {
   const link = await prisma.link.findUniqueOrThrow({ where: { code: req.params.code } });
 
-  if (link.userId !== req.user.id) {
+  if (link.userId !== req.user.id && req.user.role !== "ADMIN") {
     throw new HttpError(403, "Ce lien ne vous appartient pas");
   }
 
   next();
+}
+
+export function requireRole(role) {
+  return (req, res, next) => {
+    if (req.user.role !== role) throw new HttpError(403, "Accès réservé");
+    next();
+  };
 }
