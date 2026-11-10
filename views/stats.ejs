@@ -1,0 +1,25 @@
+<%- include('partials/header') %>
+
+<h1>/<%= link.code %></h1>
+<p class="url"><%= link.url %></p>
+<p><strong><%= total %></strong> clics</p>
+
+<h2>D'où viennent les visiteurs</h2>
+<table>
+  <tr><th>Provenance</th><th>Clics</th></tr>
+  <% byReferer.forEach((row) => { %>
+    <tr><td><%= row.referer ?? 'Accès direct' %></td><td><%= row._count %></td></tr>
+  <% }) %>
+</table>
+
+<h2>Dernières visites</h2>
+<table>
+  <tr><th>Date</th><th>Provenance</th></tr>
+  <% lastClicks.forEach((click) => { %>
+    <tr><td><%= click.createdAt.toLocaleString('fr-FR') %></td><td><%= click.referer ?? 'Accès direct' %></td></tr>
+  <% }) %>
+</table>
+
+<p><a href="/">Retour à la liste</a></p>
+
+<%- include('partials/footer') %>

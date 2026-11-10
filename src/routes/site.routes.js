@@ -3,6 +3,7 @@ import {
   createLink,
   deleteLink,
   getLink,
+  getStats,
   loadLinks,
   useLink,
 } from "../services/links.service.js";
@@ -32,6 +33,10 @@ router.post("/links", async (req, res) => {
 
   await createLink(req.body.url);
   res.redirect("/");
+});
+
+router.get("/links/:code/stats", async (req, res) => {
+  res.render("stats", await getStats(req.params.code));
 });
 
 router.post("/links/:code/delete", async (req, res) => {

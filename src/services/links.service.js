@@ -52,3 +52,25 @@ export async function useLink(code, referer) {
     },
   });
 }
+
+export async function getStats(code) {
+  const link = await getLink(code);
+
+  const [total, byReferer, lastClicks] = await Promise.all([
+    prisma.click.count({ where: { linkId: link.id } }),
+    prisma.click.groupBy({
+      by: ["referer"],
+      where: { linkId: link.id },
+      _count: true,
+    }),
+    prisma.click.findMany({
+      where: { linkId: link.id },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 10,
+    }),
+  ]);
+
+  return { link, total, byReferer, lastClicks };
+}

@@ -21,7 +21,7 @@
     <tr>
       <td><a href="/<%= link.code %>">/<%= link.code %></a></td>
       <td class="url"><%= link.url %></td>
-      <td><%= link.clicks %></td>
+      <td><a href="/links/<%= link.code %>/stats"><%= link.clicks %></a></td>
       <td>
         <% if (!link.expiresAt) { %>
           Jamais
