@@ -31,4 +31,6 @@ export async function canEdit(req, res, next) {
   if (link.userId !== req.user.id) {
     throw new HttpError(403, "Ce lien ne vous appartient pas");
   }
+
+  next();
 }
