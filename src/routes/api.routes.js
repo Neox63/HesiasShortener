@@ -2,8 +2,11 @@ import { Router } from "express";
 import { createLink, deleteLink, getLink, loadLinks } from "../services/links.service.js";
 import { validate } from "../middlewares/validate.js";
 import { createLinkSchema } from "../schemas/link.schema.js";
+import { requireAuth } from "../middlewares/auth.js";
 
 export const router = Router();
+
+router.use(requireAuth);
 
 router.get("/", async (_, res) => {
   res.json(await loadLinks());

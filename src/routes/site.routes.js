@@ -8,10 +8,11 @@ import {
   useLink,
 } from "../services/links.service.js";
 import { createLinkSchema } from "../schemas/link.schema.js";
+import { requireAuth } from "../middlewares/auth.js";
 
 export const router = Router();
 
-router.get("/", async (req, res) => {
+router.get("/", requireAuth, async (req, res) => {
   const links = await loadLinks({
     sort: req.query.sort,
   });
@@ -19,7 +20,7 @@ router.get("/", async (req, res) => {
   res.render("index", { links, error: null });
 });
 
-router.post("/links", async (req, res) => {
+router.post("/links", requireAuth, async (req, res) => {
   const result = createLinkSchema.safeParse(req.body);
 
   if (!result.success) {
@@ -35,11 +36,11 @@ router.post("/links", async (req, res) => {
   res.redirect("/");
 });
 
-router.get("/links/:code/stats", async (req, res) => {
+router.get("/links/:code/stats", requireAuth, async (req, res) => {
   res.render("stats", await getStats(req.params.code));
 });
 
-router.post("/links/:code/delete", async (req, res) => {
+router.post("/links/:code/delete", requireAuth, async (req, res) => {
   await deleteLink(req.params.code);
   res.redirect("/");
 });

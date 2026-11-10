@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+
+<h1>Connexion</h1>
+
+<form method="post" action="/login" class="stack">
+  <input name="email" type="email" placeholder="Email" required>
+  <input name="password" type="password" placeholder="Mot de passe" required>
+  <button>Se connecter</button>
+</form>
+
+<% if (error) { %><p class="error"><%= error %></p><% } %>
+
+<p>Pas de compte ? <a href="/register">Créer un compte</a></p>
+
+<%- include('partials/footer') %>

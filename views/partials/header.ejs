@@ -9,3 +9,7 @@
   <body>
     <header><a href="/" class="logo">Hesias Shortener</a></header>
     <main>
+      <% if (user) { %>
+       <form method="post" action="/logout"><%= user.email %> <button>Déconnexion</button></form>
+  <% } %>
+  
