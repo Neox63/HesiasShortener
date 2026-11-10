@@ -17,7 +17,7 @@ router.post("/login", limiter, async (req, res) => {
   const result = authSchema.safeParse(req.body);
 
   if (!result.success)
-    res.status(400).render("login", { error: "Email ou mot de pass incorrect" });
+    return res.status(400).render("login", { error: "Email ou mot de pass incorrect" });
 
   try {
     const user = await login(result.data);
