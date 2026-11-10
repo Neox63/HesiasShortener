@@ -4,8 +4,11 @@ import { HttpError } from "../HttpError.js";
 
 const generateCode = customAlphabet("abcdefghijklmnopqrstuvwxyz1234567890", 8);
 
-export async function loadLinks({ sort } = {}) {
+export async function loadLinks({ user, sort } = {}) {
   const links = await prisma.link.findMany({
+    where: {
+      userId: user.id,
+    },
     include: { _count: { select: { clicks: true } } },
     orderBy: sort === "clicks" ? { clicks: { _count: "desc" } } : { createdAt: "desc" },
   });
@@ -21,7 +24,7 @@ export const deleteLink = async (code) => {
   return prisma.link.delete({ where: { code } });
 };
 
-export async function createLink(url) {
+export async function createLink(url, userId) {
   const expiresAt = new Date();
   expiresAt.setMonth(expiresAt.getMonth() + 1);
 
@@ -30,6 +33,7 @@ export async function createLink(url) {
       code: generateCode(),
       url,
       expiresAt,
+      userId,
     },
   });
 }
