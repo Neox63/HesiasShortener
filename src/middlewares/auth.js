@@ -20,7 +20,7 @@ export function loadUser(req, res, next) {
 
 export function requireAuth(req, res, next) {
   if (req.user) return next();
-  if (req.originalUrl.startsWith("/api")) throw new HttpError(403, "Accès réservé");
+  if (req.originalUrl.startsWith("/api")) throw new HttpError(401, "Connexion requise");
 
   res.redirect("/login");
 }

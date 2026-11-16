@@ -8,8 +8,8 @@ export const router = Router();
 
 router.use(requireAuth);
 
-router.get("/", async (_, res) => {
-  res.json(await loadLinks());
+router.get("/", async (req, res) => {
+  res.json(await loadLinks({ user: req.user, sort: req.query.sort }));
 });
 
 router.get("/:code", canEdit, async (req, res) => {
@@ -17,13 +17,7 @@ router.get("/:code", canEdit, async (req, res) => {
 });
 
 router.post("/", validate(createLinkSchema), async (req, res) => {
-  const { url } = req.body;
-
-  if (!url) {
-    res.status(400).json("Error : missing URL parameter");
-  }
-
-  const link = await createLink(url);
+  const link = await createLink(req.body.url, req.user.id);
 
   res.status(201).json(link);
 });

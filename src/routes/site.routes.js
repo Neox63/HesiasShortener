@@ -2,7 +2,6 @@ import { Router } from "express";
 import {
   createLink,
   deleteLink,
-  getLink,
   getStats,
   loadLinks,
   useLink,
@@ -28,8 +27,6 @@ router.post("/links", requireAuth, async (req, res) => {
     return res.status(400).render("index", {
       links: await loadLinks({ user: req.user }),
       error: "URL invalide",
-      sort: null,
-      order: null,
     });
   }
 
