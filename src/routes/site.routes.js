@@ -8,6 +8,7 @@ import {
 } from "../services/links.service.js";
 import { createLinkSchema } from "../schemas/link.schema.js";
 import { canEdit, requireAuth } from "../middlewares/auth.js";
+import { notifyClick } from "../socket.js";
 
 export const router = Router();
 
@@ -45,6 +46,7 @@ router.post("/links/:code/delete", requireAuth, canEdit, async (req, res) => {
 
 router.get("/:code", async (req, res) => {
   const link = await useLink(req.params.code, req.get("referer"));
+  notifyClick(link);
 
   res.redirect(link.url);
 });

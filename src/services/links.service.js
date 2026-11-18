@@ -57,6 +57,7 @@ export async function useLink(code, referer) {
         },
       },
     },
+    include: { _count: { select: { clicks: true } } },
   });
 }
 

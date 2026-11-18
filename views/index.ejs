@@ -21,7 +21,7 @@
     <tr>
       <td><a href="/<%= link.code %>">/<%= link.code %></a></td>
       <td class="url"><%= link.url %></td>
-      <td><a href="/links/<%= link.code %>/stats"><%= link.clicks %></a></td>
+      <td><a href="/links/<%= link.code %>/stats" class="clicks" data-code="<%= link.code %>"><%= link.clicks %></a></td>
       <td>
         <% if (!link.expiresAt) { %>
           Jamais
@@ -40,5 +40,9 @@
   <% }) %>
 </table>
 <p><%= links.length %> liens</p>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/live.js"></script>
+
 
 <%- include('partials/footer') %>

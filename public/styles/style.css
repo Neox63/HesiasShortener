@@ -61,3 +61,6 @@ td {
 .error {
   color: #b42318;
 }
+.flash {
+  background: #ffff00;
+}
