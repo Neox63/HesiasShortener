@@ -3,6 +3,7 @@ import request from "supertest";
 import { app } from "../src/app.js";
 import { prisma } from "../src/db.js";
 import bcrypt from "bcrypt";
+import assert from "node:assert/strict";
 
 const cookies = {};
 
@@ -58,4 +59,17 @@ after(() => prisma.$disconnect());
 
 test("The API needs a login : HTTP 401", async () => {
   await request(app).get("/api/links").expect(401);
+});
+
+test("Alice voit ses liens, et pas bob", async () => {
+  const alice = await request(app)
+    .get("/api/links")
+    .set("Cookie", cookies.alice)
+    .expect(200);
+
+  assert.ok(alice.body.some((link) => link.code === "alice-1"));
+
+  const bob = await request(app).get("/api/links").set("Cookie", cookies.bob).expect(200);
+
+  assert.equal(bob.body.length, 0);
 });
