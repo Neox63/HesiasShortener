@@ -1,7 +1,7 @@
 const socket = io();
 
 socket.on("click", ({ code, clicks }) => {
-  const cell = document.querySelector(`.clicks[data-code="${code}]`);
+  const cell = document.querySelector(`.clicks[data-code="${code}"]`);
 
   if (!cell) return;
 
