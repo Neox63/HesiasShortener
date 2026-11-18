@@ -2,24 +2,37 @@
 
 <h1>/<%= link.code %></h1>
 <p class="url"><%= link.url %></p>
-<p><strong><%= total %></strong> clics</p>
+<p><strong id="total"><%= total %></strong> clics <span id="status"></span></p>
 
 <h2>D'où viennent les visiteurs</h2>
 <table>
-  <tr><th>Provenance</th><th>Clics</th></tr>
-  <% byReferer.forEach((row) => { %>
-    <tr><td><%= row.referer ?? 'Accès direct' %></td><td><%= row._count %></td></tr>
-  <% }) %>
+ 
+    <tr><th>Provenance</th><th>Clics</th></tr>
+  
+
+  
+    <% byReferer.forEach((row) => { %>
+      <tr><td><%= row.referer ?? 'Accès direct' %></td><td><%= row._count %></td></tr>
+      <% }) %>
+  
 </table>
 
 <h2>Dernières visites</h2>
-<table>
+<table> 
+  <thead>
   <tr><th>Date</th><th>Provenance</th></tr>
+</thead>
+
+  <tbody id="visits" data-code="<%= link.code %>">
   <% lastClicks.forEach((click) => { %>
     <tr><td><%= click.createdAt.toLocaleString('fr-FR') %></td><td><%= click.referer ?? 'Accès direct' %></td></tr>
   <% }) %>
+</tbody>
 </table>
 
 <p><a href="/">Retour à la liste</a></p>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/monitor.js"></script>
 
 <%- include('partials/footer') %>

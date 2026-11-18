@@ -45,8 +45,10 @@ router.post("/links/:code/delete", requireAuth, canEdit, async (req, res) => {
 });
 
 router.get("/:code", async (req, res) => {
-  const link = await useLink(req.params.code, req.get("referer"));
-  notifyClick(link);
+  const referer = req.get("referer");
+
+  const link = await useLink(req.params.code, referer);
+  notifyClick(link, { at: new Date(), referer: referer ?? null });
 
   res.redirect(link.url);
 });
